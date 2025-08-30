@@ -11,46 +11,26 @@ import java.time.LocalDate;
 @Setter
 public class FamilySurveyRequest {
     
-    // 기본 인적사항
+    // 1. 생년월일 (필수)
     @NotNull(message = "생년월일은 필수입니다.")
     private LocalDate birthDate;
     
-    private String gender; // MALE, FEMALE, OTHER
-    private String phoneNumber;
-    private String address;
-    
-    // 사망자와의 관계
+    // 2. 사망자와의 관계 (필수)
     @NotBlank(message = "사망자와의 관계는 필수입니다.")
     private String relationshipToDeceased; // SPOUSE, CHILD, PARENT, SIBLING, OTHER
     
     private String relationshipDescription; // 기타 관계 설명
     
-    // 사망자 정보
-    private String deceasedName;
-    private Integer deceasedAge;
-    private LocalDate deathDate;
-    private String causeOfDeath;
+    // 3. 심리적 지원 필요도 (필수)
+    @NotBlank(message = "심리적 지원 필요도는 필수입니다.")
+    private String psychologicalSupportLevel; // HIGH, MEDIUM, LOW, NONE
     
-    // 현재 가족 구성
-    private String currentFamilyMembers;
-    private Boolean livingAlone = false;
-    private String familySupportLevel; // HIGH, MEDIUM, LOW, NONE
-    
-    // 심리적 상태
-    private String griefStage; // DENIAL, ANGER, BARGAINING, DEPRESSION, ACCEPTANCE
-    private Boolean counselingExperience = false;
-    private String counselingWillingness; // VERY_INTERESTED, INTERESTED, NEUTRAL, NOT_INTERESTED
-    
-    // 모임 및 지원 관련
+    // 4. 모임 참석 희망 여부 (필수)
     @NotNull(message = "모임 참석 희망여부는 필수입니다.")
     private Boolean meetingParticipationDesire = false;
     
-    private String preferredMeetingType; // ONLINE, OFFLINE, BOTH
-    private String preferredMeetingTime; // WEEKDAY_MORNING, WEEKDAY_AFTERNOON, WEEKDAY_EVENING, WEEKEND
-    private String supportNeeds;
-    
-    // 추가 정보
-    private String additionalNotes;
+    // 5. 개인적 메모/요청사항 (선택)
+    private String personalNotes;
     
     @NotNull(message = "개인정보 처리 동의는 필수입니다.")
     private Boolean privacyAgreement = false;

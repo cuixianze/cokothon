@@ -1,0 +1,266 @@
+.board-write-page {
+  min-height: calc(100vh - 70px);
+  background: #f8f9fa;
+  padding: 2rem 0;
+}
+
+.board-write-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* 헤더 */
+.board-write-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.board-write-header h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 0.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.board-write-header p {
+  color: #666;
+  font-size: 1.1rem;
+  line-height: 1.6;
+}
+
+/* 폼 */
+.board-write-form {
+  background: white;
+  border-radius: 20px;
+  padding: 3rem;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.form-row {
+  display: grid;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  margin-bottom: 2rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+  color: #333;
+  font-size: 1rem;
+}
+
+.required {
+  color: #e74c3c;
+  font-weight: 700;
+}
+
+.form-control {
+  width: 100%;
+  padding: 1rem 1.25rem;
+  border: 2px solid #e1e5e9;
+  border-radius: 12px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  background: #fafafa;
+  font-family: inherit;
+  resize: none;
+  color: #333;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #667eea;
+  background: white;
+  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+  color: #333;
+}
+
+.form-control:disabled {
+  background: #f5f5f5;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+select.form-control {
+  cursor: pointer;
+}
+
+.content-textarea {
+  min-height: 400px;
+  line-height: 1.6;
+  font-family: 'Apple SD Gothic Neo', 'Pretendard', -apple-system, BlinkMacSystemFont, system-ui, sans-serif;
+}
+
+.char-count {
+  text-align: right;
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: #6c757d;
+}
+
+/* 액션 버튼 */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 3rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e9ecef;
+}
+
+.btn {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  min-width: 120px;
+  justify-content: center;
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+}
+
+.btn-secondary {
+  background: #6c757d;
+  color: white;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #5a6268;
+  transform: translateY(-3px);
+  box-shadow: 0 12px 35px rgba(108, 117, 125, 0.3);
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* 에러 메시지 */
+.error-message {
+  background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%);
+  color: #c62828;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border-left: 4px solid #e57373;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(229, 115, 115, 0.2);
+}
+
+/* 성공 메시지 */
+.success-message {
+  background: linear-gradient(135deg, #f3e5f5 0%, #e8f5e8 100%);
+  color: #2e7d32;
+  padding: 1rem 1.25rem;
+  border-radius: 12px;
+  border-left: 4px solid #66bb6a;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
+  font-weight: 500;
+  box-shadow: 0 4px 15px rgba(102, 187, 106, 0.2);
+}
+
+/* 반응형 */
+@media (max-width: 768px) {
+  .board-write-page {
+    padding: 1rem 0;
+  }
+  
+  .board-write-container {
+    padding: 0 0.5rem;
+  }
+  
+  .board-write-header h1 {
+    font-size: 2rem;
+  }
+  
+  .board-write-form {
+    padding: 2rem 1.5rem;
+    border-radius: 15px;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .btn {
+    width: 100%;
+    order: 2;
+  }
+  
+  .btn-secondary {
+    order: 1;
+  }
+}
+
+@media (max-width: 480px) {
+  .board-write-form {
+    padding: 1.5rem 1rem;
+  }
+  
+  .board-write-header h1 {
+    font-size: 1.75rem;
+  }
+  
+  .form-control {
+    padding: 0.875rem 1rem;
+  }
+  
+  .content-textarea {
+    min-height: 300px;
+  }
+}
+
+/* 포커스 애니메이션 */
+@keyframes focusRing {
+  0% {
+    box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(102, 126, 234, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  }
+}
+
+.form-control:focus {
+  animation: focusRing 0.3s ease;
+}
+
+/* 입력 중 스타일 */
+.form-control:not(:placeholder-shown) {
+  background: white;
+  border-color: #b8c5d6;
+  color: #333;
+}

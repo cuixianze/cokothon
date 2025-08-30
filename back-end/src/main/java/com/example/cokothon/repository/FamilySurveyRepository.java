@@ -29,18 +29,8 @@ public interface FamilySurveyRepository extends JpaRepository<FamilySurvey, Long
     // 모임 참석 희망자 조회
     List<FamilySurvey> findByMeetingParticipationDesireTrue();
     
-    // 상담 의향이 있는 사용자 조회
-    @Query("SELECT fs FROM FamilySurvey fs WHERE fs.counselingWillingness IN ('VERY_INTERESTED', 'INTERESTED')")
-    List<FamilySurvey> findUsersInterestedInCounseling();
-    
-    // 혼자 살고 있는 유가족 조회
-    List<FamilySurvey> findByLivingAloneTrue();
-    
-    // 가족 지원 정도별 조회
-    List<FamilySurvey> findByFamilySupportLevel(String supportLevel);
-    
-    // 선호하는 모임 방식별 조회
-    List<FamilySurvey> findByPreferredMeetingType(String meetingType);
+    // 심리적 지원 필요도별 조회
+    List<FamilySurvey> findByPsychologicalSupportLevel(String supportLevel);
     
     // 통계용 쿼리들
     @Query("SELECT COUNT(fs) FROM FamilySurvey fs WHERE fs.surveyCompleted = true")
@@ -49,8 +39,8 @@ public interface FamilySurveyRepository extends JpaRepository<FamilySurvey, Long
     @Query("SELECT fs.relationshipToDeceased, COUNT(fs) FROM FamilySurvey fs WHERE fs.surveyCompleted = true GROUP BY fs.relationshipToDeceased")
     List<Object[]> getRelationshipStatistics();
     
-    @Query("SELECT fs.griefStage, COUNT(fs) FROM FamilySurvey fs WHERE fs.surveyCompleted = true AND fs.griefStage IS NOT NULL GROUP BY fs.griefStage")
-    List<Object[]> getGriefStageStatistics();
+    @Query("SELECT fs.psychologicalSupportLevel, COUNT(fs) FROM FamilySurvey fs WHERE fs.surveyCompleted = true AND fs.psychologicalSupportLevel IS NOT NULL GROUP BY fs.psychologicalSupportLevel")
+    List<Object[]> getPsychologicalSupportStatistics();
     
     // 사용자가 설문조사를 완료했는지 확인
     @Query("SELECT CASE WHEN COUNT(fs) > 0 THEN true ELSE false END FROM FamilySurvey fs WHERE fs.user.id = :userId AND fs.surveyCompleted = true")

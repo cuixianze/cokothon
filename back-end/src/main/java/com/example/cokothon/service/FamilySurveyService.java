@@ -79,14 +79,9 @@ public class FamilySurveyService {
         return familySurveyRepository.findByMeetingParticipationDesireTrue();
     }
     
-    // 상담 의향이 있는 사용자 조회
-    public List<FamilySurvey> getCounselingInterestedUsers() {
-        return familySurveyRepository.findUsersInterestedInCounseling();
-    }
-    
-    // 혼자 살고 있는 유가족 조회
-    public List<FamilySurvey> getUsersLivingAlone() {
-        return familySurveyRepository.findByLivingAloneTrue();
+    // 심리적 지원이 필요한 사용자 조회
+    public List<FamilySurvey> getUsersByPsychologicalSupportLevel(String supportLevel) {
+        return familySurveyRepository.findByPsychologicalSupportLevel(supportLevel);
     }
     
     // 관계별 유가족 조회
@@ -111,28 +106,28 @@ public class FamilySurveyService {
         }
         stats.setRelationshipStatistics(relationshipMap);
         
-        // 애도 단계별 통계
-        List<Object[]> griefStageStats = familySurveyRepository.getGriefStageStatistics();
-        Map<String, Long> griefStageMap = new HashMap<>();
-        for (Object[] stat : griefStageStats) {
-            griefStageMap.put((String) stat[0], (Long) stat[1]);
+        // 심리적 지원 필요도별 통계
+        List<Object[]> psychologicalSupportStats = familySurveyRepository.getPsychologicalSupportStatistics();
+        Map<String, Long> psychologicalSupportMap = new HashMap<>();
+        for (Object[] stat : psychologicalSupportStats) {
+            psychologicalSupportMap.put((String) stat[0], (Long) stat[1]);
         }
-        stats.setGriefStageStatistics(griefStageMap);
+        stats.setGriefStageStatistics(psychologicalSupportMap); // 기존 필드명 재사용
         
         // 모임 참석 희망 통계
         long meetingDesired = familySurveyRepository.findByMeetingParticipationDesireTrue().size();
         stats.setMeetingParticipationDesired(meetingDesired);
         stats.setMeetingParticipationNotDesired(stats.getCompletedSurveys() - meetingDesired);
         
-        // 상담 의향 통계
-        long counselingInterested = familySurveyRepository.findUsersInterestedInCounseling().size();
-        stats.setCounselingInterested(counselingInterested);
-        stats.setCounselingNotInterested(stats.getCompletedSurveys() - counselingInterested);
+        // 심리적 지원 필요도 통계
+        long highSupportNeeded = familySurveyRepository.findByPsychologicalSupportLevel("HIGH").size();
+        long mediumSupportNeeded = familySurveyRepository.findByPsychologicalSupportLevel("MEDIUM").size();
+        long lowSupportNeeded = familySurveyRepository.findByPsychologicalSupportLevel("LOW").size();
+        long noSupportNeeded = familySurveyRepository.findByPsychologicalSupportLevel("NONE").size();
         
-        // 홀로 거주 통계
-        long livingAlone = familySurveyRepository.findByLivingAloneTrue().size();
-        stats.setLivingAloneCount(livingAlone);
-        stats.setLivingWithFamilyCount(stats.getCompletedSurveys() - livingAlone);
+        // 통계 Response 설정 (기존 필드명 재사용)
+        stats.setCounselingInterested(highSupportNeeded + mediumSupportNeeded);
+        stats.setCounselingNotInterested(lowSupportNeeded + noSupportNeeded);
         
         return stats;
     }
@@ -148,32 +143,11 @@ public class FamilySurveyService {
     // 요청 데이터로 설문조사 엔티티 업데이트하는 private 메서드
     private void updateSurveyFromRequest(FamilySurvey survey, FamilySurveyRequest request) {
         survey.setBirthDate(request.getBirthDate());
-        survey.setGender(request.getGender());
-        survey.setPhoneNumber(request.getPhoneNumber());
-        survey.setAddress(request.getAddress());
-        
         survey.setRelationshipToDeceased(request.getRelationshipToDeceased());
         survey.setRelationshipDescription(request.getRelationshipDescription());
-        
-        survey.setDeceasedName(request.getDeceasedName());
-        survey.setDeceasedAge(request.getDeceasedAge());
-        survey.setDeathDate(request.getDeathDate());
-        survey.setCauseOfDeath(request.getCauseOfDeath());
-        
-        survey.setCurrentFamilyMembers(request.getCurrentFamilyMembers());
-        survey.setLivingAlone(request.getLivingAlone());
-        survey.setFamilySupportLevel(request.getFamilySupportLevel());
-        
-        survey.setGriefStage(request.getGriefStage());
-        survey.setCounselingExperience(request.getCounselingExperience());
-        survey.setCounselingWillingness(request.getCounselingWillingness());
-        
+        survey.setPsychologicalSupportLevel(request.getPsychologicalSupportLevel());
         survey.setMeetingParticipationDesire(request.getMeetingParticipationDesire());
-        survey.setPreferredMeetingType(request.getPreferredMeetingType());
-        survey.setPreferredMeetingTime(request.getPreferredMeetingTime());
-        survey.setSupportNeeds(request.getSupportNeeds());
-        
-        survey.setAdditionalNotes(request.getAdditionalNotes());
+        survey.setPersonalNotes(request.getPersonalNotes());
         survey.setPrivacyAgreement(request.getPrivacyAgreement());
         
         // 필수 항목이 모두 채워져 있으면 완료 처리
@@ -187,6 +161,8 @@ public class FamilySurveyService {
         return request.getBirthDate() != null
                 && request.getRelationshipToDeceased() != null
                 && !request.getRelationshipToDeceased().trim().isEmpty()
+                && request.getPsychologicalSupportLevel() != null
+                && !request.getPsychologicalSupportLevel().trim().isEmpty()
                 && request.getMeetingParticipationDesire() != null
                 && request.getPrivacyAgreement() != null
                 && request.getPrivacyAgreement();

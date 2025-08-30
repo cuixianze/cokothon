@@ -135,9 +135,10 @@ public class FamilySurveyController {
         return ResponseEntity.ok(ApiResponse.success(responses));
     }
     
-    // 관리자용 - 상담 의향자 조회
-    @GetMapping("/admin/counseling-interested")
-    public ResponseEntity<ApiResponse<List<FamilySurveyResponse>>> getCounselingInterestedUsers(
+    // 관리자용 - 심리적 지원 필요도별 조회
+    @GetMapping("/admin/psychological-support/{supportLevel}")
+    public ResponseEntity<ApiResponse<List<FamilySurveyResponse>>> getUsersByPsychologicalSupportLevel(
+            @PathVariable String supportLevel,
             HttpSession session) {
         
         if (!authService.isAdmin(session)) {
@@ -145,25 +146,7 @@ public class FamilySurveyController {
                     .body(ApiResponse.error("관리자 권한이 필요합니다."));
         }
         
-        List<FamilySurvey> surveys = familySurveyService.getCounselingInterestedUsers();
-        List<FamilySurveyResponse> responses = surveys.stream()
-                .map(FamilySurveyResponse::from)
-                .collect(Collectors.toList());
-        
-        return ResponseEntity.ok(ApiResponse.success(responses));
-    }
-    
-    // 관리자용 - 혼자 거주하는 유가족 조회
-    @GetMapping("/admin/living-alone")
-    public ResponseEntity<ApiResponse<List<FamilySurveyResponse>>> getUsersLivingAlone(
-            HttpSession session) {
-        
-        if (!authService.isAdmin(session)) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error("관리자 권한이 필요합니다."));
-        }
-        
-        List<FamilySurvey> surveys = familySurveyService.getUsersLivingAlone();
+        List<FamilySurvey> surveys = familySurveyService.getUsersByPsychologicalSupportLevel(supportLevel);
         List<FamilySurveyResponse> responses = surveys.stream()
                 .map(FamilySurveyResponse::from)
                 .collect(Collectors.toList());
