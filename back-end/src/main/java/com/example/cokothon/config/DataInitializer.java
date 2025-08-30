@@ -2,9 +2,11 @@ package com.example.cokothon.config;
 
 import com.example.cokothon.entity.Board;
 import com.example.cokothon.entity.Category;
+import com.example.cokothon.entity.FamilySurvey;
 import com.example.cokothon.entity.User;
 import com.example.cokothon.repository.BoardRepository;
 import com.example.cokothon.repository.CategoryRepository;
+import com.example.cokothon.repository.FamilySurveyRepository;
 import com.example.cokothon.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +21,7 @@ public class DataInitializer implements CommandLineRunner {
     private final CategoryRepository categoryRepository;
     private final BoardRepository boardRepository;
     private final UserRepository userRepository;
+    private final FamilySurveyRepository familySurveyRepository;
     
     @Override
     public void run(String... args) throws Exception {
@@ -166,7 +169,80 @@ public class DataInitializer implements CommandLineRunner {
                 questionBoard
         ));
         
+        // 샘플 설문조사 생성
+        createSampleSurveys(user1, user2, user3);
+        
         log.info("초기 데이터 생성이 완료되었습니다.");
-        log.info("사용자 4명 (관리자 1명 포함), 카테고리 3개, 게시글 8개가 생성되었습니다.");
+        log.info("사용자 4명 (관리자 1명 포함), 카테고리 3개, 게시글 8개, 설문조사 3개가 생성되었습니다.");
+    }
+    
+    private void createSampleSurveys(User user1, User user2, User user3) {
+        // 김개발 사용자의 설문조사 (완료)
+        FamilySurvey survey1 = new FamilySurvey(user1);
+        survey1.setBirthDate(java.time.LocalDate.of(1985, 3, 15));
+        survey1.setGender("MALE");
+        survey1.setPhoneNumber("010-1234-5678");
+        survey1.setAddress("서울시 강남구");
+        survey1.setRelationshipToDeceased("CHILD");
+        survey1.setDeceasedName("김아버지");
+        survey1.setDeceasedAge(68);
+        survey1.setDeathDate(java.time.LocalDate.of(2024, 1, 10));
+        survey1.setCauseOfDeath("암");
+        survey1.setCurrentFamilyMembers("어머니, 배우자, 자녀 2명");
+        survey1.setLivingAlone(false);
+        survey1.setFamilySupportLevel("HIGH");
+        survey1.setGriefStage("ACCEPTANCE");
+        survey1.setCounselingExperience(true);
+        survey1.setCounselingWillingness("INTERESTED");
+        survey1.setMeetingParticipationDesire(true);
+        survey1.setPreferredMeetingType("BOTH");
+        survey1.setPreferredMeetingTime("WEEKEND");
+        survey1.setSupportNeeds("같은 상황의 사람들과 경험 공유");
+        survey1.setPrivacyAgreement(true);
+        survey1.setSurveyCompleted(true);
+        familySurveyRepository.save(survey1);
+        
+        // 이코딩 사용자의 설문조사 (완료)
+        FamilySurvey survey2 = new FamilySurvey(user2);
+        survey2.setBirthDate(java.time.LocalDate.of(1990, 7, 22));
+        survey2.setGender("FEMALE");
+        survey2.setPhoneNumber("010-2345-6789");
+        survey2.setAddress("서울시 서초구");
+        survey2.setRelationshipToDeceased("SPOUSE");
+        survey2.setDeceasedName("박남편");
+        survey2.setDeceasedAge(32);
+        survey2.setDeathDate(java.time.LocalDate.of(2024, 3, 5));
+        survey2.setCauseOfDeath("교통사고");
+        survey2.setCurrentFamilyMembers("자녀 1명");
+        survey2.setLivingAlone(false);
+        survey2.setFamilySupportLevel("MEDIUM");
+        survey2.setGriefStage("DEPRESSION");
+        survey2.setCounselingExperience(false);
+        survey2.setCounselingWillingness("VERY_INTERESTED");
+        survey2.setMeetingParticipationDesire(true);
+        survey2.setPreferredMeetingType("ONLINE");
+        survey2.setPreferredMeetingTime("WEEKDAY_EVENING");
+        survey2.setSupportNeeds("심리 상담 및 육아 지원");
+        survey2.setAdditionalNotes("어린 자녀가 있어 온라인 참여를 선호합니다.");
+        survey2.setPrivacyAgreement(true);
+        survey2.setSurveyCompleted(true);
+        familySurveyRepository.save(survey2);
+        
+        // 박스터디 사용자의 설문조사 (미완료)
+        FamilySurvey survey3 = new FamilySurvey(user3);
+        survey3.setBirthDate(java.time.LocalDate.of(1988, 11, 8));
+        survey3.setGender("MALE");
+        survey3.setRelationshipToDeceased("SIBLING");
+        survey3.setDeceasedName("박여동생");
+        survey3.setDeceasedAge(25);
+        survey3.setDeathDate(java.time.LocalDate.of(2024, 2, 14));
+        survey3.setLivingAlone(true);
+        survey3.setFamilySupportLevel("LOW");
+        survey3.setGriefStage("ANGER");
+        survey3.setCounselingExperience(false);
+        survey3.setMeetingParticipationDesire(false);
+        survey3.setPrivacyAgreement(true);
+        survey3.setSurveyCompleted(false); // 미완료 상태
+        familySurveyRepository.save(survey3);
     }
 }
